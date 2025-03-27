@@ -1,0 +1,3 @@
+Update CVS_CDR_Data_Load.Control 
+set State='Complete' 
+where InterfaceName ='HCAAMBULATORY'

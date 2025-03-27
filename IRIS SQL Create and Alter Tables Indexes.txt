@@ -1,0 +1,134 @@
+CREATE TABLE PCC_Data_PCC.MasterRoster
+AS 
+select  MemberStatus, FacilityCode, FirstName, MiddleName, LastName, AddressLine1, AddressLine2,
+City, State, Zip, DateOfBirth, Gender, Homephone, Workphone, Cellphone, Vendor1, REGION,
+InsuranceGroup, ProgramName, URNMBIID, IMICVSSSK, HRPIDCVSSSK 
+from
+(
+SELECT 'ADD' As MemberStatus,{fn CONCAT('Aetna-MC-', a.State)} as FacilityCode,
+		p.Member->FirstName,p.Member->MiddleInitial as MiddleName, p.Member->LastName,
+		a.Line1 as AddressLine1,a.Line2 as AddressLine2,a.City,a.State,a.Zip,
+		p.Member->DateOfBirth,p.Member->Gender,p.Member->Phone as Homephone,
+		p.Member->Phone as Workphone,p.Member->Phone as Cellphone,'Y' as Vendor1,
+		'AI' as REGION,p.LOB as InsuranceGroup,p.Identifier as ProgramName,
+		p.Member->CarrierMemberID as URNMBIID,p.Member->SSK as IMICVSSSK, p.UniqueMemberID as HRPIDCVSSSK
+FROM CVS_CDR_MasterRoster.Plan As p
+JOIN CVS_CDR_MasterRoster.Address AS a ON (p.Member = a.Member AND p.StagedPlanEffectiveDate = a.EffectiveDate)
+WHERE p.LOB = 'MEDICARE'
+group by p.member
+having p.stagedplaneffectivedate = max(p.stagedplaneffectivedate)
+)
+
+CREATE TABLE MASTER_ROSTER.PCC_Roster_Medicare
+AS 
+
+CREATE TABLE MASTER_ROSTER.HCA_MEDICAID
+AS 
+SELECT DISTINCT TOP 1 r.SSK As MemberID, r.FirstName as MemberFirstName,r.MiddleInitial as MemberMiddleInitial,
+	   r.LastName as MemberLastName,r.DateOfBirth as MemberDateOfBirth,
+	   r.Gender as MemberSex,r.Phone as MemberHomePhone,r.Phone as MemberCellPhone,
+	   p.MemberPlanEffectiveDate as MemberEffectiveDate, p.MemberPlanTerminationDate as MemberTerminationDate
+FROM CVS_CDR_MasterRoster.Record As r
+JOIN CVS_CDR_MasterRoster.Plan AS p ON (r.ID = p.Member) 
+WHERE UPPER(p.LOB) = 'MEDICARE'
+
+CREATE TABLE MASTER_ROSTER.HCA_MEDICAID
+AS 
+SELECT DISTINCT TOP 1 r.SSK As MemberID, r.FirstName as MemberFirstName,r.MiddleInitial as MemberMiddleInitial,
+	   r.LastName as MemberLastName,r.DateOfBirth as MemberDateOfBirth,
+	   r.Gender as MemberSex,r.Phone as MemberHomePhone,r.Phone as MemberCellPhone,
+	   p.MemberPlanEffectiveDate as MemberEffectiveDate, p.MemberPlanTerminationDate as MemberTerminationDate
+FROM CVS_CDR_MasterRoster.Record As r
+JOIN CVS_CDR_MasterRoster.Plan AS p ON (r.ID = p.Member) 
+WHERE UPPER(p.LOB) = 'MEDICAID'
+
+
+SELECT 
+   MR.MemberID, MemberFirstName, MemberMiddleInitial, MemberLastName, 
+   MemberDateOfBirth, MemberSex, MemberHomePhone, MemberCellPhone, 
+   MemberEffectiveDate, MemberTerminationDate
+FROM MASTER_ROSTER.HCA_MEDICAID as MR
+JOIN MASTER_ROSTER.HCA_MEDICAID_MEMBER_DUPS AS MRD ON (MR.MemberID = MRD.MemberID)
+order by MR.MemberID desc
+
+
+CREATE TABLE MASTER_ROSTER.HCA_MEDICAID_MEMBER_DUPS
+AS 
+SELECT MemberID FROM
+(
+SELECT MemberID, TOTAL FROM
+(
+SELECT MemberID, COUNT(*) AS TOTAL
+FROM MASTER_ROSTER.HCA_MEDICAID
+GROUP BY MemberID
+)
+WHERE TOTAL > 1
+)
+
+
+ALTER TABLE MASTER_ROSTER.HCA_COMMERCIAL
+    ALTER COLUMN MemberDateOfBirth VARCHAR(50)
+
+CREATE INDEX MemberIDIdx ON TABLE MASTER_ROSTER.HCA_MEDICAID (MemberID)
+CREATE INDEX MemberIDIdx ON TABLE MASTER_ROSTER.HCA_MEDICAID_MEMBER_DUPS (MemberID)
+
+
+ 
+SELECT 
+MemberID
+FROM MASTER_ROSTER.HCA_MEDICAID_MEMBER_DUPS
+where MemberID not in 
+(
+  SELECT distinct MR.MemberID
+   FROM MASTER_ROSTER.HCA_MEDICAID as MR
+   JOIN MASTER_ROSTER.HCA_MEDICAID_MEMBER_DUPS AS MRD ON (MR.MemberID = MRD.MemberID)
+   WHERE MemberTerminationDate <> '9999-12-31'
+)
+
+SELECT 
+   MemberID, MemberFirstName, MemberMiddleInitial, MemberLastName, MemberDateOfBirth, MemberSex, 
+   MemberHomePhone, MemberCellPhone, MemberEffectiveDate, MemberTerminationDate
+FROM
+MASTER_ROSTER.HCA_MEDICAID
+WHERE MemberID IN
+(
+   SELECT distinct MR.MemberID
+   FROM MASTER_ROSTER.HCA_MEDICAID as MR
+   JOIN MASTER_ROSTER.HCA_MEDICAID_MEMBER_DUPS AS MRD ON (MR.MemberID = MRD.MemberID)
+   WHERE MemberTerminationDate = '9999-12-31'
+)
+ORDER BY MemberID DE
+
+SELECT DISTINCT
+   MR.MemberID
+FROM MASTER_ROSTER.HCA_MEDICAID as MR
+JOIN MASTER_ROSTER.HCA_MEDICAID_MEMBER_DUPS AS MRD ON (MR.MemberID = MRD.MemberID)
+where MemberTerminationDate = '9999-12-31'
+
+SELECT DISTINCT TOP 1 r.SSK As MemberID, r.FirstName as MemberFirstName,r.MiddleInitial as MemberMiddleInitial,
+	   r.LastName as MemberLastName,r.DateOfBirth as MemberDateOfBirth,
+	   r.Gender as MemberSex,r.Phone as MemberHomePhone,r.Phone as MemberCellPhone,
+	   p.MemberPlanEffectiveDate as MemberEffectiveDate, p.MemberPlanTerminationDate as MemberTerminationDate
+FROM CVS_CDR_MasterRoster.Record As r
+JOIN CVS_CDR_MasterRoster.Plan AS p ON (r.ID = p.Member) 
+WHERE UPPER(p.LOB) = 'MEDICAID'
+
+MAHATHI QUERY
+-----------------------
+SELECT 
+MemberID, MemberFirstName, MemberMiddleInitial, MemberLastName, MemberDateOfBirth, MemberSex, MemberHomePhone, MemberCellPhone, MemberEffectiveDate, MemberTerminationDate
+FROM MASTER_ROSTER.HCA_COMMERCIAL as C1
+Where Exists(
+Select 1 From MASTER_ROSTER.HCA_COMMERCIAL as C2
+Where C1.MemberFirstName = C2.MemberFirstName
+AND C1.MemberLastName = C2.MemberLastName
+-----------------------
+
+SELECT 
+   MR.MemberID, MemberFirstName, MemberMiddleInitial, MemberLastName, 
+   MemberDateOfBirth, MemberSex, MemberHomePhone, MemberCellPhone, 
+   MemberEffectiveDate, MemberTerminationDate
+FROM MASTER_ROSTER.HCA_MEDICAID as MR
+JOIN MASTER_ROSTER.HCA_MEDICAID_MEMBER_DUPS AS MRD ON (MR.MemberID = MRD.MemberID)
+order by MR.MemberID desc
+
