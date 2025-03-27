@@ -1,0 +1,77 @@
+Splunk Query to get all Medicaid Pre-Processing count
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster "jsonPayload.CIS_DATATYPE"="ADT" "jsonPayload.CIS_SOURCE"="*MDCD*" "jsonPayload.STEP_NAME"="Conversion-Pre"	
+
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster jsonPayload.CIS_DATATYPE="ADT" "jsonPayload.CIS_SOURCE"="MDCD-HIE-KY-KYHIE-ABHKY"
+	
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster jsonPayload.CIS_DATATYPE="ADT" "jsonPayload.CIS_SOURCE"="MDCR-HIE-PCC"
+
+TOTAL MESSAGE COUNT FOR MEDICAID | KY PIPELINE | ADT
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster jsonPayload.CIS_DATATYPE="ADT" "jsonPayload.CIS_SOURCE"="MDCD-HIE-KY-KYHIE-ABHKY" |bucket _time span=day |stats count by _time
+
+TOTAL MESSAGE COUNT FOR MEDICAID | KY PIPELINE | ADT STEP NAME = INGESTION
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster jsonPayload.CIS_DATATYPE="ADT" jsonPayload.CIS_SOURCE="*KYHIE-ABHKY*" "jsonPayload.STEP_NAME"=Ingestion |bucket _time span=day |stats count by _time
+
+| timechart span=Id count by jsonPayload.CIS_SOURCE
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster jsonPayload.CIS_DATATYPE="ORU" jsonPayload.CIS_SOURCE="*KYHIE*" "jsonPayload.STEP_NAME"=Ingestion 
+
+TOTAL MESSAGE COUNT FOR PCC MEDICARE | ADT
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster jsonPayload.CIS_DATATYPE="ADT" "jsonPayload.CIS_SOURCE"="MDCR-HIE-PCC" |bucket _time span=day |stats count by _time
+
+DTL:	CVS.CDR.MasterRoster.TransformToHCAOutput) 
+Service:	CVS.CDR.HCAAmbulatory.PTFile.Svc
+Operation:	CVS.CDR.HCAAmbulatory.PTSFTP.Operation
+
+
+GS Storage:
+usmedpent-eds-prdlan-cis|/irissys/data/pcc/medicare/|PCC_INBOUND/PointClickCareGCP-UI1057443-Medicare_CVS_PCCMAV|PCC_INBOUND/Archive/
+
+OTHER WORKING NOTES
+
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster 
+jsonPayload.CIS_DATATYPE="ADT" "jsonPayload.CIS_SOURCE"="MDCD-HIE-KY-KYHIE-ABHKY"
+02/20/2024 @ 00:00:00.000  -TO-  02/24/2025 10:15:00.000
+ > 1,237,401 ADT
+
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster 
+jsonPayload.CIS_DATATYPE="ORU" "jsonPayload.CIS_SOURCE"="MDCD-HIE-KY-KYHIE-ABHKY"
+02/20/2024 @ 00:00:00.000  -TO-  02/24/2025 10:15:00.000
+ > 205,859 ORU
+-----------------------
+> 1,443,260 Total ADT & ORU Messages
+
+index="edp" project_id="edp-prod-eds-cdr-cis" container_name=iriscluster 
+"jsonPayload.CIS_SOURCE"="MDCD-HIE-KY-KYHIE-ABHKY"
+> 1,446,699 Total Messages 
+
+Difference: 3,439 NOT ADT or ORU MESSAGES
+
+
+
+
+
+
+
+
+https:// github.aetna.com/UDF-DataOperations/cdr-cis-iris-hscustom-oci
+
+
+
+
+/// Query to extract all medicare members active from 20231110 for HCA ambulatory 
+/// the query to return the Plan Id rather than the Record Id
+/// This is so we can correctly perform the HCA transformation "TransformToHCAOutput"
+/// 2/25/2025: Updated query to factor in Multiple Plans
+Query HCAMedicareMembers(pDate As %Date) As %SQLQuery [ SqlProc ]
+{
+SELECT distinct p.Id
+	FROM CVS_CDR_MasterRoster.Record AS r
+	JOIN CVS_CDR_MasterRoster.Plan As p On r.ID = p.Member
+Where UPPER(p.LOB) = 'MEDICARE' and TO_DATE(p.StagedPlanTerminationDate,'YYYYMMDD') > TO_DATE(:pDate,'YYYYMMDD')
+group by p.member
+having p.stagedplaneffectivedate = max(p.stagedplaneffectivedate)
+}
+
+
+
+/users/c388272/
+
