@@ -1,0 +1,118 @@
+
+CAREMARKRX+C808334@DELL74403RMPTW3 MING (HCBProdMedicaid)
+$ get pull origin
+bash: get: command not found
+
+CAREMARKRX+C808334@DELL74403RMPTW3 MING (HCBProdMedicaid)
+$ git pull origin
+remote: Enumerating objects: 333, done.
+remote: Counting objects: 100% (219/219
+remote: Compressing objects: 100% (56/5
+remote: Total 130 (delta 94), reused 10
+Receiving objects: 100% (130/130), 20.9
+Resolving deltas: 100% (94/94), complet
+From github.aetna.com:UDF-DataOperation
+   ca33701c..8de8ae93  EHIN's-Defect-Fi
+   2bafced7..45d91d15  Roster_changes  
+ * [new branch]        WellskyRoster   
+   3f919cf1..bca8d3de  dev             
+   07c49f51..835ef0ce  feature/HCA-ADT_20&Phase2
+   33defdca..84c39b03  feature/US183432_PAHSX-Roster
+   92aad26e..9a1b0383  feature/US191823918237_NYHLTHX_ADT_NGC2.0
+ * [new branch]        feature/US193229
+ * [new branch]        feature/us194456ture/us1944568-payload-push-operation-f
+   f135b3eb..676607e9  master          
+   07c49f51..835ef0ce  feature/HCA-ADT_20&Phase2
+   33defdca..84c39b03  feature/US183432_PAHSX-Roster
+   92aad26e..9a1b0383  feature/US191823918237_NYHLTHX_ADT_NGC2.0
+ * [new branch]        feature/US193229
+ * [new branch]        feature/us194456ture/us1944568-payload-push-operation-f
+   f135b3eb..676607e9  master          
+20&Phase2
+   33defdca..84c39b03  feature/US183432_PAHSX-Roster
+   92aad26e..9a1b0383  feature/US191823918237_NYHLTHX_ADT_NGC2.0
+ * [new branch]        feature/US193229
+ * [new branch]        feature/us194456ture/us1944568-payload-push-operation-f
+   f135b3eb..676607e9  master          
+_PAHSX-Roster
+   92aad26e..9a1b0383  feature/US191823918237_NYHLTHX_ADT_NGC2.0
+ * [new branch]        feature/US193229
+ * [new branch]        feature/us194456ture/us1944568-payload-push-operation-f
+   f135b3eb..676607e9  master          
+ * [new branch]        feature/us194456ture/us1944568-payload-push-operation-f
+   f135b3eb..676607e9  master          
+   f135b3eb..676607e9  master          
+You asked to pull from the remote 'origcify
+a branch. Because this is not the defauYou asked to pull from the remote 'origcify
+a branch. Because this is not the defaua branch. Because this is not the defaufor your current branch, you must specia branch. Because this is not the defau        
+for your current branch, you must specia branch. Because this is not the defau   .
+for your current branch, you must specia branch. Because this is not the defau nd line.
+for your current branch, you must speci
+
+for your current branch, you must speci
+
+for your current branch, you must speci
+
+for your current branch, you must speci
+
+for your current branch, you must specin
+
+for your current branch, you must speci  the command line.
+for your current branch, you must specicor your current branch, you must specih on the command line.
+for your current branch, you must specind line.
+for your current branch, you must specind line.     08334@DELL74403RMPTW3 MING
+for your current branch, you must specind line.RX+C808334@DELL74403RMPTW3 MING
+for your current branch, you must specind lin
+for your current branch, you must specin
+for your current branch, you must speci comline.
+for your current branch, you must speciy a branch on th
+e command line.
+for your current branch, you must speciy a branch C808334@DELL74403RMPTW3 MINGon the command line.
+for your current branch, you must speciy a brancX+C808334@DELL74403RMPTW3 MINGh on the command line.
+for your current branch, you must speciy a branRX+C808334@DELL74403RMPTW3 MINGch on the command line.
+for your current branch, you must speciy a braKRX+C808334@DELL74403RMPTW3 MINGnch on the command line.
+for your current branch, you must speciy a bARKRX+C808334@DELL74403RMPTW3 MINGranch on the command line.
+for your current branch, you must speciy aEMARKRX+C808334@DELL74403RMPTW3 MING branch on the command line.
+for your current branch, you must specify MARKRX+C808334@DELL74403RMPTW3 MINGa branch on the command line.
+for your current branch, you must spec ifREMARKRX+C808334@DELL74403RMPTW3 MINy a branch on the command line.
+for your current branch, you must specify a branch on the command line.
+
+CAREMARKRX+C808334@DELL74403RMPTW3 MINGW64 /c/workspace/cdr-cis-iris-hscustom-oci (HCBProdMedicaid)
+$ git pull origin dev
+From github.aetna.com:UDF-DataOperations/cdr-cis-iris-hscustom-oci
+ * branch              dev        -> FETCH_HEAD
+Updating 3f919cf1..bca8d3de
+Fast-forward
+ .../API/Transform/CVSFHIRPostTransform.cls         |  40 ++--
+ CVS/CDR/HL7ToFHIR/DE/v2xTo251.cls                  |  10 +-
+ CVS/CDR/HL7ToFHIR/HCA/HL7Process.cls               | 201 +++++------------    
+ CVS/CDR/MasterRoster/TransformToPAHSXOutput.cls    |   2 +-
+ CVS/CDR/MemberRoster/Deploy.cls                    |  75 ++++++-
+ CVS/CDR/MemberRoster/Record.cls                    |   5 +-
+ CVS/CDR/MemberRoster/TransformToWellskyRecord.cls  |  34 +--
+ CVS/CDR/MemberRoster/Wellsky/XRef.cls              | 243 +++++++++++++++++++++
+ CVS/CDR/MemberRoster/Wellsky/XRefProcess.cls       |  16 ++
+ CVS/CDR/MemberRoster/WellskyRecord.cls             |   7 +-
+ .../SmartRoster/SignifyMSSPConnieSmartLabels.cls   |  21 ++
+ CVS/CDR/SmartRoster/WellskyRosterGenerator.cls     |  47 +---
+ CVSPRODPKG/HL7GATEWAY/Production.cls               |   2 -
+ CVSPRODPKG/MBRGATEWAY/Production.cls               |   5 +
+ 14 files changed, 477 insertions(+), 231 deletions(-)
+ create mode 100644 CVS/CDR/MemberRoster/Wellsky/XRef.cls
+ create mode 100644 CVS/CDR/MemberRoster/Wellsky/XRefProcess.cls
+ create mode 100644 CVS/CDR/SmartRoster/SignifyMSSPConnieSmartLabels.cls
+
+CAREMARKRX+C808334@DELL74403RMPTW3 MINGW64 /c/workspace/cdr-cis-iris-hscustom-oci (HCBProdMedicaid)
+$ git commit -m"HCBAPIChanges"
+[HCBProdMedicaid ab8894e5] HCBAPIChanges
+ 2 files changed, 91 insertions(+), 25 deletions(-)
+
+CAREMARKRX+C808334@DELL74403RMPTW3 MINGW64 /c/workspace/cdr-cis-iris-hscustom-oci (HCBProdMedicaid)
+$ git push origin
+Everything up-to-date
+
+CAREMARKRX+C808334@DELL74403RMPTW3 MINGW64 /c/workspace/cdr-cis-iris-hscustom-oci (HCBProdMedicaid)
+$ ^C
+
+CAREMARKRX+C808334@DELL74403RMPTW3 MINGW64 /c/workspace/cdr-cis-iris-hscustom-oci (HCBProdMedicaid)
+$

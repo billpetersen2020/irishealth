@@ -1,0 +1,13 @@
+AUDIT TRANSACTION COUNT BY DATE RANGE
+SELECT 
+ID, InsertDate, SessionId, SourceEnvironment, Type, WaterMarkID, CQ_ErrorStatusText, CQ_OrgKey, CQ_Response, CQ_ResponseIsValid, CQ_RqstSourceID, CQ_Status, CQ_Type, FHIR_CohortId, FHIR_DateReceivedByISCfromHIE, FHIR_DateReceivedFromISC, FHIR_ErrorStatusText, "FHIR_Header_X-CORRELATION-ID", "FHIR_Header_X-ISC-SEND-MSG-SIZE", "FHIR_Header_X-ISC-SEND-TIMESTAMP", "FHIR_Header_X-ISC-TRACKING-ID", "FHIR_Header_X-SOURCE-ADT-MESSAGE-CONTROL-ID", "FHIR_Header_X-SOURCE-CONNECTION", "FHIR_Header_X-SOURCE-FTP-FILENAME", "FHIR_Header_X-SOURCE-HTTP-TRACKING-ID", "FHIR_Header_X-SOURCE-MSG-SIZE", "FHIR_Header_X-SOURCE-MSG-TIMESTAMP", "FHIR_Header_X-SOURCE-MSG-TYPE", "FHIR_Header_X-SOURCE-NETWORK", FHIR_MemberId, FHIR_OriginalSource, FHIR_SafetyCheckPass, FHIR_SourceNetwork, FHIR_SuccessIndicator, FHIR_TypeOfArtifact, HL7_ArtifactType, HL7_ErrorStatusText, HL7_MemberId, HL7_OriginalSource, HL7_PatientId, HL7_ServiceName, HL7_SourceNetwork, HL7_SuccessIndicator, HL7_TypeVersion
+FROM CVS_CDR_Audit.Txn
+WHERE (InsertDate BETWEEN '2025-01-06 00:00:00.000' AND '2025-01-12 23:59:59.999') AND HL7_ArtifactType LIKE 'ORU%'
+
+
+AUDIT TRANSACTIONS BY THE HOUR
+SELECT 
+count(*) as CVS_CDR_TRX_COUNT, {fn HOUR(InsertDate)} as TRX_DATE_HOUR, DATE(InsertDate) As TRX_DATE
+FROM CVS_CDR_Audit.Txn
+WHERE (InsertDate BETWEEN '2025-01-06 00:00:00.000' AND '2025-01-12 23:59:59.999') AND HL7_ArtifactType LIKE 'ORU%'
+GROUP BY DATE(InsertDate), {fn HOUR(InsertDate)} 
